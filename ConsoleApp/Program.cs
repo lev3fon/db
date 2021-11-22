@@ -9,6 +9,7 @@ namespace ConsoleApp
     {
         private readonly IUserRepository userRepo;
         private readonly IGameRepository gameRepo;
+        private readonly IGameTurnRepository turnRepo;
         private readonly Random random = new Random();
 
         private Program(string[] args)
@@ -17,7 +18,8 @@ namespace ConsoleApp
                 "mongodb+srv://lev_3fon:lev1990t@cluster0.qz5qk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
             var db = new MongoClient(mongoConnectionString).GetDatabase("game");
             userRepo = new MongoUserRepository(db);
-            gameRepo = new InMemoryGameRepository();
+            gameRepo = new MongoGameRepository(db);
+            //turnRepo = new MongoGameTurnRepository(db);
         }
 
         public static void Main(string[] args)
