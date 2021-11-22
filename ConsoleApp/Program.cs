@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Game.Domain;
+using MongoDB.Driver;
 
 namespace ConsoleApp
 {
@@ -12,7 +13,10 @@ namespace ConsoleApp
 
         private Program(string[] args)
         {
-            userRepo = new InMemoryUserRepository();
+            var mongoConnectionString =
+                "mongodb+srv://lev_3fon:lev1990t@cluster0.qz5qk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+            var db = new MongoClient(mongoConnectionString).GetDatabase("game");
+            userRepo = new MongoUserRepository(db);
             gameRepo = new InMemoryGameRepository();
         }
 
@@ -143,7 +147,7 @@ namespace ConsoleApp
 
         private PlayerDecision GetAiDecision()
         {
-            return (PlayerDecision)Math.Min(3, 1 + random.Next(4));
+            return (PlayerDecision) Math.Min(3, 1 + random.Next(4));
         }
 
         private void UpdatePlayersWhenGameFinished(GameEntity game)
